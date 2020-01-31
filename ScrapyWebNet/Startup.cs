@@ -28,7 +28,6 @@ namespace ScrapyWebNet
         {
             services.AddControllersWithViews();
             services.AddTransient<IUnitOfWork, UnitOfWork>();
-            //services.AddTransient<IRepository<Node>, NodeRepository>();
             services.AddTransient<IApiClient, ApiClient>();
             services.AddTransient<IScrapydAPI, ScrapydAPI>();
             services.AddDbContext<DatabaseContext>(options => {
