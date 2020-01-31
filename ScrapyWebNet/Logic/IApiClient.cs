@@ -8,6 +8,8 @@ namespace ScrapyWebNet.Logic
 {
     public interface IApiClient
     {
+        string Url {get;set;}
+
         ApiStatusResponse GetStatus();
         ApiListProjectsResponse GetProjectsList();
         ApiListSpidersResponse GetProjectSpiders(string projectName);

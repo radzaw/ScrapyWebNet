@@ -1,3 +1,18 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+
+
+@foreach (Node node in Model.Nodes)
+{
+    <div class="row">
+        <div class="col-md-12">
+            <b>@node.NodeUrl (<a asp-action="DelNode" asp-controller="Node" asp-route-id="@node.NodeId">delete</a>)</b>
+        </div>
+    </div>
+}
+
+    <form asp-action="AddNode" asp-controller="Node" method="post">
+        Node URL: <input type="text" name="url" />
+        <input type="submit" value="Add">
+    </form>

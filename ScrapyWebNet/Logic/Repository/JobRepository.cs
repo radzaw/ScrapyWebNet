@@ -8,9 +8,9 @@ namespace ScrapyWebNet.Logic.Repository
 {
     public class JobRepository : IRepository<Job>
     {
-        private IApiClient apiClient = null;
+        private IScrapydAPI apiClient = null;
 
-        public JobRepository(IApiClient apiClient)
+        public JobRepository(IScrapydAPI apiClient)
         {
             this.apiClient = apiClient;
         }
@@ -25,12 +25,12 @@ namespace ScrapyWebNet.Logic.Repository
             throw new NotImplementedException();
         }
 
-        public Job Get(Func<Job, bool> predicate)
+        public Job Get(string id)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Job> GetMany(Func<Job, bool> predicate = null)
+        public IEnumerable<Job> GetAll()
         {
             throw new NotImplementedException();
         }

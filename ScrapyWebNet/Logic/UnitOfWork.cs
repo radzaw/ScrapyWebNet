@@ -1,4 +1,5 @@
 ﻿using ScrapyWebNet.Logic.Repository;
+using ScrapyWebNet.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,9 +7,11 @@ using System.Threading.Tasks;
 
 namespace ScrapyWebNet.Logic
 {
-    public class UnitOfWork: IUnitOfWork
+    public class UnitOfWork: IUnitOfWork, IDisposable
     {
-        private IApiClient apiClient = null;
+        private IScrapydAPI apiClient = null;
+        private DatabaseContext dbContext = null;
+        private bool disposed = false;
 
         private NodeRepository nodeRepository = null;
         public NodeRepository Nodes
@@ -17,7 +20,7 @@ namespace ScrapyWebNet.Logic
             {
                 if (this.nodeRepository == null)
                 {
-                    this.nodeRepository = new NodeRepository();
+                    this.nodeRepository = new NodeRepository(this.dbContext);
                 }
 
                 return this.nodeRepository;
@@ -38,9 +41,35 @@ namespace ScrapyWebNet.Logic
             }
         }
 
-        public UnitOfWork(IApiClient apiClient)
+        public UnitOfWork(IScrapydAPI apiClient, DatabaseContext _dbContext)
         {
             this.apiClient = apiClient;
+            this.dbContext = _dbContext;
         }
+
+        public void SaveChanges()
+        {
+            this.dbContext.SaveChanges();
+        }
+
+        #region Handle objects disposal
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!this.disposed)
+            {
+                if (disposing)
+                {
+                    this.dbContext.Dispose();
+                }
+            }
+            disposed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+        #endregion
     }
 }

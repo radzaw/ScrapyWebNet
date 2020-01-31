@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScrapyWebNet", "ScrapyWebNet.csproj", "{C9158F64-3240-4D97-BAF6-22033CDE0B07}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScrapyWebNet.Tests", "..\ScrapyWebNet.Tests\ScrapyWebNet.Tests.csproj", "{CCD7565C-9BCE-4B1E-9000-0CC20054D6E7}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C9158F64-3240-4D97-BAF6-22033CDE0B07} = {C9158F64-3240-4D97-BAF6-22033CDE0B07}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -7,8 +7,8 @@ namespace ScrapyWebNet.Logic.Repository
 {
     interface IRepository<T> where T : class
     {
-        IEnumerable<T> GetMany(Func<T, bool> predicate = null);
-        T Get(Func<T, bool> predicate);
+        IEnumerable<T> GetAll();
+        T Get(string id);
         void Add(T entity);
         void Delete(T entity);
     }

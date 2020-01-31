@@ -1,4 +1,5 @@
 ﻿using ScrapyWebNet.Models;
+using ScrapyWebNet.Models.API;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,29 +9,31 @@ namespace ScrapyWebNet.Logic.Repository
 {
     public class NodeRepository : IRepository<Node>
     {
-        public NodeRepository()
-        {
+        private DatabaseContext dbContext = null;
 
+        public NodeRepository(DatabaseContext _dbContext)
+        {
+            this.dbContext = _dbContext;
         }
 
         public void Add(Node entity)
         {
-            throw new NotImplementedException();
+            this.dbContext.Nodes.Add(entity);
         }
 
         public void Delete(Node entity)
         {
-            throw new NotImplementedException();
+            this.dbContext.Nodes.Remove(entity);
         }
 
-        public Node Get(Func<Node, bool> predicate)
+        public Node Get(string id)
         {
-            throw new NotImplementedException();
+            return this.dbContext.Nodes.FirstOrDefault(n => n.NodeId == id);
         }
 
-        public IEnumerable<Node> GetMany(Func<Node, bool> predicate = null)
+        public IEnumerable<Node> GetAll()
         {
-            throw new NotImplementedException();
+            return this.dbContext.Nodes;
         }
     }
 }

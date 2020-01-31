@@ -14,24 +14,35 @@ namespace ScrapyWebNet.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> logger;
-        private readonly UnitOfWork uow;
+        private readonly IUnitOfWork unitOfWork;
+        private readonly IScrapydAPI scrapyApi;
 
-        public HomeController(ILogger<HomeController> logger, IUnitOfWork uow)
+        public HomeController(ILogger<HomeController> _logger, IUnitOfWork _unitOfWork, IScrapydAPI _scrapyApi)
         {
-            this.logger = logger;
-            this.uow = (UnitOfWork)uow;
+            this.logger = _logger;
+            this.unitOfWork = _unitOfWork;
+            this.scrapyApi = _scrapyApi;
         }
 
         public IActionResult Index()
         {
-            IEnumerable<Node> nodes = this.uow.Nodes.GetMany(n => n.Active == 1);
+            IEnumerable<Node> nodes = this.unitOfWork.Nodes.GetAll();
+
+            if (nodes != null)
+            {
+                // check status of all nodes
+                foreach (Node node in nodes)
+                {
+                    this.scrapyApi.GetStatus(node);
+                }
+            }
 
             IndexViewModel viewModel = new IndexViewModel(nodes);
 
             return View(viewModel);
         }
 
-        public IActionResult Privacy()
+        public IActionResult Jobs([FromQuery] string nodeName)
         {
             return View();
         }

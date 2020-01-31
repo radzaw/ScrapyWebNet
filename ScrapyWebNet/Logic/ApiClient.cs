@@ -8,6 +8,14 @@ namespace ScrapyWebNet.Logic
 {
     public class ApiClient : IApiClient
     {
+        private string apiUrl = String.Empty;
+
+        public string Url
+        {
+            get { return this.apiUrl; }
+            set { this.apiUrl = value; }
+        }
+
         public ApiListJobsResponse GetProjectJobs(string projectName)
         {
             throw new NotImplementedException();
@@ -25,7 +33,8 @@ namespace ScrapyWebNet.Logic
 
         public ApiStatusResponse GetStatus()
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+            return new ApiStatusResponse();
         }
     }
 }
