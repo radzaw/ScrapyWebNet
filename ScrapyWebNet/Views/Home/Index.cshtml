@@ -10,9 +10,33 @@
             <b>@node.NodeUrl (<a asp-action="DelNode" asp-controller="Node" asp-route-id="@node.NodeId">delete</a>)</b>
         </div>
     </div>
+    <div class="row">
+        <div class="col-md-12">
+            <p>Status: @node.Status | Running: @node.Running | Pending: @node.Pending | Finished: @node.Finished</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <p>Projects:</p>
+            <ul>
+                @if  (Model.Projects.ContainsKey(node.NodeId))
+                {
+                    @foreach (Project project in Model.Projects[node.NodeId])
+                    {
+                        <li><a asp-action="Details" asp-controller="Project" asp-route-project="@project.Name">@project.Name</a></li>
+                    }
+                }
+            </ul>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <a class="btn btn-info" asp-action="Jobs" asp-controller="Home" asp-route-nodeId="@node.NodeId">Jobs</a> <a class="btn btn-info">Projects</a>
+        </div>
+    </div>
 }
 
-    <form asp-action="AddNode" asp-controller="Node" method="post">
-        Node URL: <input type="text" name="url" />
-        <input type="submit" value="Add">
-    </form>
+<form asp-action="AddNode" asp-controller="Node" method="post">
+    Node URL: <input type="text" name="url" />
+    <input type="submit" value="Add">
+</form>

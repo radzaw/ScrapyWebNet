@@ -11,9 +11,9 @@ namespace ScrapyWebNet.Logic
         string Url {get;set;}
 
         ApiStatusResponse GetStatus();
-        ApiListProjectsResponse GetProjectsList();
+        ApiListProjectsResponse GetProjects();
         ApiListSpidersResponse GetProjectSpiders(string projectName);
 
-        ApiListJobsResponse GetProjectJobs(string projectName);
+        ApiListJobsResponse GetProjectJobs();
     }
 }

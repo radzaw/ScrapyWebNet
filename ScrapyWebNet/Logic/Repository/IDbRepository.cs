@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace ScrapyWebNet.Logic.Repository
 {
-    interface IRepository<T> where T : class
+    interface IDbRepository<T> where T : class
     {
         IEnumerable<T> GetAll();
         T Get(string id);

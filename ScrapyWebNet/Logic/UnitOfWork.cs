@@ -41,10 +41,24 @@ namespace ScrapyWebNet.Logic
             }
         }
 
-        public UnitOfWork(IScrapydAPI apiClient, DatabaseContext _dbContext)
+        private ProjectRepository projectRepository = null;
+        public ProjectRepository Projects
+        {
+            get
+            {
+                if (this.projectRepository == null)
+                {
+                    this.projectRepository = new ProjectRepository(this.apiClient);
+                }
+
+                return this.projectRepository;
+            }
+        }
+
+        public UnitOfWork(IScrapydAPI apiClient, DatabaseContext dbContext)
         {
             this.apiClient = apiClient;
-            this.dbContext = _dbContext;
+            this.dbContext = dbContext;
         }
 
         public void SaveChanges()

@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace ScrapyWebNet.Logic.Repository
 {
-    public class NodeRepository : IRepository<Node>
+    public class NodeRepository : IDbRepository<Node>
     {
         private DatabaseContext dbContext = null;
 
-        public NodeRepository(DatabaseContext _dbContext)
+        public NodeRepository(DatabaseContext dbContext)
         {
-            this.dbContext = _dbContext;
+            this.dbContext = dbContext;
         }
 
         public void Add(Node entity)

@@ -17,34 +17,36 @@ namespace ScrapyWebNet.Controllers
         private readonly IUnitOfWork unitOfWork;
         private readonly IScrapydAPI scrapyApi;
 
-        public HomeController(ILogger<HomeController> _logger, IUnitOfWork _unitOfWork, IScrapydAPI _scrapyApi)
+        public HomeController(ILogger<HomeController> logger, IUnitOfWork unitOfWork, IScrapydAPI scrapyApi)
         {
-            this.logger = _logger;
-            this.unitOfWork = _unitOfWork;
-            this.scrapyApi = _scrapyApi;
+            this.logger = logger;
+            this.unitOfWork = unitOfWork;
+            this.scrapyApi = scrapyApi;
         }
 
         public IActionResult Index()
         {
             IEnumerable<Node> nodes = this.unitOfWork.Nodes.GetAll();
+            Dictionary<string, List<Project>> projects = new Dictionary<string, List<Project>>();
 
             if (nodes != null)
             {
-                // check status of all nodes
                 foreach (Node node in nodes)
                 {
-                    this.scrapyApi.GetStatus(node);
+                    // check status of the node
+                    this.scrapyApi.NodeStatus(node);
+
+                    // get projects on this node
+                    this.unitOfWork.Projects.SetNode(node);
+                    projects.Add(node.NodeId, this.unitOfWork.Projects.GetAll());
                 }
+
+
             }
 
-            IndexViewModel viewModel = new IndexViewModel(nodes);
+            IndexViewModel viewModel = new IndexViewModel(nodes, projects);
 
             return View(viewModel);
-        }
-
-        public IActionResult Jobs([FromQuery] string nodeName)
-        {
-            return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

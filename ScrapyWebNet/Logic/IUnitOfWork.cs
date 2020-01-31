@@ -8,8 +8,9 @@ namespace ScrapyWebNet.Logic
 {
     public interface IUnitOfWork
     {
-        public NodeRepository Nodes { get; }
-        public JobRepository Jobs { get; }
-        //public ProjectRepository Projects { get; set; }
+        NodeRepository Nodes { get; }
+        JobRepository Jobs { get; }
+        
+        ProjectRepository Projects { get; }
     }
 }

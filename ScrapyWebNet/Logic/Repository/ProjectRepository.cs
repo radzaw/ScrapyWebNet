@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace ScrapyWebNet.Logic.Repository
 {
-    public class JobRepository : IApiRepository<Job>
+    public class ProjectRepository : IApiRepository<Project>
     {
         private IScrapydAPI apiClient = null;
         private Node node = null;
 
-        public JobRepository(IScrapydAPI apiClient)
+        public ProjectRepository(IScrapydAPI apiClient)
         {
             this.apiClient = apiClient;
         }
@@ -25,24 +25,25 @@ namespace ScrapyWebNet.Logic.Repository
             this.node = node;
         }
 
-        public void Add(Job entity)
+        public void Add(Project entity)
         {
             throw new NotImplementedException();
         }
 
-        public void Delete(Job entity)
-        {
-            this.apiClient.JobStop(this.node, entity);
-        }
-
-        public Job Get(string id)
+        public void Delete(Project entity)
         {
             throw new NotImplementedException();
         }
 
-        public List<Job> GetAll()
+        public Project Get(string id)
         {
             throw new NotImplementedException();
         }
+
+        public List<Project> GetAll()
+        {
+            return this.apiClient.ProjectList(this.node);
+        }
+
     }
 }

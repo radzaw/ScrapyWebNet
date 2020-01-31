@@ -9,15 +9,15 @@ using System.Threading.Tasks;
 
 namespace ScrapyWebNet.Controllers
 {
-    public class NodeController : Controller, IDisposable
+    public class NodeController : Controller
     {
         private readonly ILogger<HomeController> logger = null;
         private readonly UnitOfWork unitOfWork = null;
 
-        public NodeController(ILogger<HomeController> _logger, IUnitOfWork _unitOfWork)
+        public NodeController(ILogger<HomeController> logger, IUnitOfWork unitOfWork)
         {
-            this.logger = _logger;
-            this.unitOfWork = (UnitOfWork)_unitOfWork;
+            this.logger = logger;
+            this.unitOfWork = (UnitOfWork)unitOfWork;
         }
 
         [HttpPost]

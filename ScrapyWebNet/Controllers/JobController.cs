@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ScrapyWebNet.Logic;
+using ScrapyWebNet.Models;
+using ScrapyWebNet.Models.View;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,12 +13,28 @@ namespace ScrapyWebNet.Controllers
     public class JobController : Controller
     {
         private readonly ILogger<HomeController> logger;
-        private readonly UnitOfWork unitOfWork;
+        private readonly IUnitOfWork unitOfWork;
 
-        public JobController(ILogger<HomeController> _logger, IUnitOfWork _unitOfWork)
+        public JobController(ILogger<HomeController> logger, IUnitOfWork unitOfWork)
         {
-            this.logger = _logger;
-            this.unitOfWork = (UnitOfWork)_unitOfWork;
+            this.logger = logger;
+            this.unitOfWork = unitOfWork;
+        }
+
+        public IActionResult List([FromQuery] string nodeId)
+        {
+            Node node = this.unitOfWork.Nodes.Get(nodeId);
+            if (node == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            this.unitOfWork.Jobs.SetNode(node);
+            IEnumerable<Job> jobs = this.unitOfWork.Jobs.GetAll();
+
+            JobsViewModel viewModel = new JobsViewModel(node, jobs);
+
+            return View(viewModel);
         }
 
         public IActionResult Start()

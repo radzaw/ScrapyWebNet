@@ -1,4 +1,5 @@
-﻿using ScrapyWebNet.Models;
+﻿using Microsoft.Extensions.Logging;
+using ScrapyWebNet.Models;
 using ScrapyWebNet.Models.API;
 using System;
 using System.Collections.Generic;
@@ -10,13 +11,67 @@ namespace ScrapyWebNet.Logic
     public class ScrapydAPI: IScrapydAPI
     {
         private IApiClient apiClient = null;
+        private ILogger<ScrapydAPI> logger = null;
 
-        public ScrapydAPI(IApiClient _apiClient)
+        private Node.NodeStatus ConvertStatus(string statusString)
         {
-            this.apiClient = _apiClient;
+            switch (statusString)
+            {
+                case "ok":
+                    return Node.NodeStatus.OK;
+                default:
+                    return Node.NodeStatus.Unknown;
+            }
         }
 
-        public void GetStatus(Node node)
+        public ScrapydAPI(IApiClient apiClient, ILogger<ScrapydAPI> logger)
+        {
+            this.apiClient = apiClient;
+            this.logger = logger;
+        }
+
+        public void JobStart(Node node, Project project, Job job)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void JobStop(Node node, Job job)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Project> ProjectList(Node node)
+        {
+            this.apiClient.Url = node.NodeUrl;
+
+            List<Project> response = new List<Project>();
+
+            try
+            {
+                ApiListProjectsResponse apiResponse = this.apiClient.GetProjects();
+                foreach (string project in apiResponse.Projects)
+                {
+                    response.Add(new Project(project));
+                }
+            }
+            catch (ApiException e)
+            {
+                this.logger.LogError(e, e.Message);
+            }
+
+            return response;
+        }
+
+        public List<Job> JobList(Node node, Project project)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Gets 
+        /// </summary>
+        /// <param name="node"></param>
+        public void NodeStatus(Node node)
         {
             this.apiClient.Url = node.NodeUrl;
 
@@ -26,8 +81,9 @@ namespace ScrapyWebNet.Logic
             {
                 status = this.apiClient.GetStatus();
             }
-            catch (ApiException)
+            catch (ApiException e)
             {
+                this.logger.LogError(e, e.Message);
                 node.Status = Node.NodeStatus.ConnectionError;
             }
 
@@ -36,19 +92,11 @@ namespace ScrapyWebNet.Logic
                 return;
             }
 
-            node.Pending = Convert.ToInt32(status.Pending);
-            node.Running = Convert.ToInt32(status.Running);
+            node.Pending = status.Pending;
+            node.Running = status.Running;
             node.NodeName = status.NodeName;
 
-            switch (status.Status)
-            {
-                case "Ok":
-                    node.Status = Node.NodeStatus.OK;
-                    break;
-                default:
-                    node.Status = Node.NodeStatus.Unknown;
-                    break;
-            }
+            
         }
     }
 }
